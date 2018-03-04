@@ -1,0 +1,168 @@
+Constant DEBUG;
+Constant NO_SCORE;
+Constant DIALECT_US;
+
+Constant Story "SOUNDTEST";
+Constant Headline "^An interactive noisemaker by David Griffith^";
+
+Release 0;
+
+Include "parser";
+Include "sound.h";
+Include "verblib";
+Include "infglk.h";
+
+Object Room "Test Room"
+	with name "room",
+	description "You're in a small, nondescript room.  In the middle 
+		of the room is a table.",
+	has light;
+
+Object -> Table "table"
+	with name "table",
+	description "It's a run-of-the-mill table.",
+	has scenery supporter;
+
+Object -> Amiga "Commodore Amiga"
+	with name "commodore" "amiga" "computer" "1000",
+	description "It's a Commodore Amiga 1000 computer with monitor.
+		You can turn it on or off.",
+	before [;
+	SwitchOn:
+		PlaySound(6);
+		"You turn on ", (the) self, " and it immedately begins 
+			playing an old time MOD file.";
+	SwitchOff:
+		StopSound(6);
+		"You turn off ", (the) self, " and the music stops.";
+	],
+	has switchable;
+
+
+Object -> C64 "Commodore 64"
+	with name "commodore" "computer" "64" "c64" "c-64",
+	description "It's a Commodore 64 computer with monitor.
+		You can turn it on or off.",
+	before [;
+	SwitchOn:
+		PlaySound(7);
+		"You turn on ", (the) self, " and it immediately begins 
+			playing the tune from the game Sanxion.";
+	SwitchOff:
+		StopSound(7);
+		"You turn off ", (the) self, " and the music stops.";
+	],
+	has switchable;
+
+Object -> Device "little handheld device"
+	with name "little" "handheld" "machine" "thing" "device",
+	description "It's about the size of a pack of cards.  There are 
+		four buttons on it: a red one, a blue one, a green one, 
+		and one marked ~off~.
+		There is also a dial with settings from 1 to 8.",
+	has transparent;
+
+
+Object -> -> Dial "dial"
+	with name "dial" "knob",
+	description [;
+		"It's an old-fashioned radio dial with numbers from 
+		1 to 8.  It is currently set to ", (number) self.setting, ".";
+	],
+	setting 8,
+	max	8,
+	min	1,
+	before [;
+	SetTo:
+		if (second > self.max || second < self.min) {
+			"The dial doesn't go that far.";
+		}
+		self.setting = second;
+		sound_vol = second;
+		"You set the dial to ", (number) second, ".";
+	],
+	has scenery;
+
+Object -> -> RedButton "red button"
+	with name "red" "button",
+	description "It's a red button.",
+	before [;
+	Push:
+		PlaySound(3);
+		"You press ", (the) self, ".";
+	],
+	has scenery;
+
+Object -> -> BlueButton "blue button"
+	with name "blue" "button",
+	description "It's a blue button.",
+	before [;
+	Push:
+		PlaySound(4);
+		"You press ", (the) self, ".";
+	],
+	has scenery;
+
+Object -> -> GreenButton "green button"
+	with name "green" "button",
+	description "It's a green button.",
+	before [;
+	Push:
+		PlaySound(5);
+		"You press ", (the) self, ".";
+	],
+	has scenery;
+
+!Object -> -> BrownButton "brown button"
+!	with name "brown" "button",
+!	description "It's a brown button.",
+!	before [;
+!		PlaySound(8);
+!		"You press ", (the) self, ".";
+!	],
+!	has scenery;
+
+!Object -> -> BlackButton "black button"
+!	with name "black" "button",
+!	description "It's a black button.",
+!	before [;
+!		PlaySound(9);
+!		"You press ", (the) self, ".";
+!	],
+!	has scenery;
+
+
+
+Object -> -> OffButton "off button"
+	with name "off" "button",
+	description "It's a button labeled ~off~.",
+	before [;
+!		StopSound(0);
+!		@sound_effect 4 4;
+		@sound_effect 0 4;
+		"You press ", (the) self, ".";
+	],
+	has scenery;
+
+
+[ Initialise;
+
+	location = Room;
+	sound_vol = 8;
+	move Device to Table;
+	move Amiga to Table;
+	move C64 to Table;
+
+	print "This is an interactive demonstration of sound samples in 
+	an Inform 6 game.  The center of attention is a table in the 
+	middle of the room upon which are some interesting objects.^^";
+
+	print "[Press any key to begin.] ";
+	KeyCharPrimitive();
+	ClearScreen();
+	sound_vol = Dial.setting;
+!	InitSound();
+	"^";
+];
+
+Include "grammar";

@@ -1,0 +1,6 @@
+storyfile "soundtest.z5" include
+sound 3 "awooga2.aiff"
+sound 4 "buzzer.aiff"
+sound 5 "cuckoo.aiff"
+sound 6 "blue.mod"
+sound 7 "sanxion2.ogg"
