@@ -35,7 +35,7 @@ blorb:
 	$(BLORB) $(BINNAME).blurb $(BINNAME)$(BLORB_EXTENSION) > blurb.inf
 
 clean:
-	rm -f *zblorb blurb.inf
+	rm -f *.z5 *zblorb blurb.inf
 
 help:
 	@echo "Makefile for Inform compilation"
